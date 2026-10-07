@@ -4,7 +4,7 @@ const { spawn, spawnSync } = require('child_process');
 const path = require('path');
 const os = require('os');
 const fs = require('fs');
-const { detectPlatform, ytdlpPath, ffmpegLocation, ffmpegPath, ffprobePath, hasFfmpeg, hasFfprobe } = require('../utils/ytdlp');
+const { detectPlatform, ytdlpPath, ffmpegLocation, ffmpegPath, ffprobePath, hasFfmpeg, hasFfprobe, resolveCookiesFile } = require('../utils/ytdlp');
 const progress = require('../utils/progress');
 
 const SUPPORTED = ['youtube', 'facebook', 'tiktok', 'instagram'];
@@ -238,6 +238,14 @@ router.get('/', async (req, res) => {
 
     if (ffmpegLocation) {
       args.push('--ffmpeg-location', ffmpegLocation);
+    }
+
+    if (platform === 'youtube') {
+      args.push('--extractor-args', 'youtube:player_client=android,web');
+    }
+    const cookiesFile = resolveCookiesFile();
+    if (cookiesFile) {
+      args.push('--cookies', cookiesFile);
     }
 
     if (isAudio) {

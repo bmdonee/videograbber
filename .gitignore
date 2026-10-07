@@ -2,6 +2,7 @@ node_modules/
 downloads/
 *.log
 .env
+cookies.txt
 .DS_Store
 .vscode/
 .idea/

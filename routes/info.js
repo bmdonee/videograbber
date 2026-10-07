@@ -38,7 +38,13 @@ router.post('/', async (req, res) => {
     res.json(response);
   } catch (error) {
     console.error('Info error:', error.message);
-    res.status(500).json({ error: error.message || 'Failed to fetch video information' });
+    const message = error.message || 'Failed to fetch video information';
+    // YouTube's bot check hits datacenter IPs; show visitors a readable
+    // message instead of yt-dlp's raw cookie/cookies-from-browser dump.
+    if (/not a bot|sign in|cookies-from-browser|cookies for the authentication/i.test(message)) {
+      return res.status(502).json({ error: "YouTube is blocking this server right now (bot check). Try a TikTok, Instagram or Facebook link, or try again later." });
+    }
+    res.status(500).json({ error: message });
   }
 });
 

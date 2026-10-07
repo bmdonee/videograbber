@@ -172,15 +172,56 @@ function buildFlags(flagsObj) {
   return args;
 }
 
+let cachedCookiesFile = null;
+
+/**
+ * Optional YouTube authentication. Datacenter IPs (Render, Railway, etc.)
+ * are frequently hit by YouTube's "Sign in to confirm you're not a bot"
+ * check. Exporting a cookies.txt from a logged-in browser and providing it
+ * via the YOUTUBE_COOKIES env var (full file content) or a cookies.txt file
+ * lets yt-dlp look like a signed-in viewer. Without it, YouTube may fail
+ * while TikTok/Instagram/Facebook keep working.
+ */
+function resolveCookiesFile() {
+  if (cachedCookiesFile && fs.existsSync(cachedCookiesFile)) return cachedCookiesFile;
+
+  const fromEnv = process.env.YOUTUBE_COOKIES;
+  if (fromEnv && fromEnv.includes('youtube.com')) {
+    const target = path.join(os.tmpdir(), 'yt-cookies.txt');
+    try {
+      fs.writeFileSync(target, fromEnv.replace(/\\n/g, '\n'));
+      cachedCookiesFile = target;
+      return target;
+    } catch (e) {}
+  }
+
+  const candidates = [
+    process.env.COOKIES_FILE,
+    path.join(__dirname, '..', 'cookies.txt'),
+    '/etc/secrets/cookies.txt'
+  ].filter(Boolean);
+  for (const candidate of candidates) {
+    try {
+      if (fs.statSync(candidate).isFile()) return candidate;
+    } catch (e) {}
+  }
+  return null;
+}
+
 async function getVideoInfo(url) {
   try {
-    const flags = buildFlags({
+    const flagObj = {
       dumpSingleJson: true,
       noCheckCertificates: true,
       noWarnings: true,
       preferFreeFormats: true,
-      addHeader: ['cookie:CONSENT=YES+cb']
-    });
+      // The old addHeader cookie is deprecated by yt-dlp; the android player
+      // client works without login for most public videos.
+      extractorArgs: 'youtube:player_client=android,web'
+    };
+    const cookies = resolveCookiesFile();
+    if (cookies) flagObj.cookies = cookies;
+    const flags = buildFlags(flagObj);
     return await runYtdlp(url, flags);
   } catch (error) {
     throw new Error(`Failed to fetch video info: ${error.message}`);
@@ -293,6 +334,7 @@ function buildDownloadFlags(formatOption) {
 
 module.exports = {
   getVideoInfo,
+  resolveCookiesFile,
   detectPlatform,
   formatDuration,
   buildFormats,
