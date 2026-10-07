@@ -110,10 +110,11 @@ function renderResult(data) {
 
   resultBox.appendChild(list);
 
-  const adSlot = document.createElement('div');
-  adSlot.className = 'ad-result ad-placeholder';
-  adSlot.textContent = 'Ad Space (responsive)';
-  resultBox.appendChild(adSlot);
+  // Ad placeholder below download card (disabled)
+  // const adSlot = document.createElement('div');
+  // adSlot.className = 'ad-result ad-placeholder';
+  // adSlot.textContent = 'Ad Space (responsive)';
+  // resultBox.appendChild(adSlot);
 
   resultBox.hidden = false;
   resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
