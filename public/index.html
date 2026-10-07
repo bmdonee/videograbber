@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Free online video downloader. Download videos and reels from YouTube, Facebook, TikTok, and Instagram in HD quality.">
+  <title>VideoGrabber - Free Video Downloader for YouTube, Facebook, TikTok, Instagram</title>
+  <script>
+    // Applies a saved theme before first paint to avoid a flash of the wrong
+    // colours. With no stored choice the page stays light.
+    (function () {
+      try {
+        if (localStorage.getItem('vg-theme') === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (err) {
+        /* storage unavailable (private mode) - keep the light default */
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <a href="/" class="logo">
+        <span class="logo-icon">⬇</span>
+        <span class="logo-text">VideoGrabber</span>
+      </a>
+      <nav class="nav" id="siteNav">
+        <a href="#how-it-works">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#supported">Supported</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </g>
+          </svg>
+        </button>
+        <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Open menu">
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Ad placeholder: top banner -->
+  <!--
+  <div class="ad-banner ad-top">
+    <div class="ad-placeholder">Ad Space (728x90)</div>
+  </div>
+  -->
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1 class="hero-title">Download Videos from <span class="gradient-text">Anywhere</span></h1>
+        <p class="hero-subtitle">Fast, free, and no watermark. Save videos from YouTube, Facebook, TikTok, and Instagram in HD quality.</p>
+
+        <div class="platforms-pills">
+          <span class="pill pill-yt">▶ YouTube</span>
+          <span class="pill pill-fb">f Facebook</span>
+          <span class="pill pill-tt">♪ TikTok</span>
+          <span class="pill pill-ig">◎ Instagram</span>
+        </div>
+
+        <div class="url-form">
+          <div class="input-wrapper">
+            <input
+              type="text"
+              id="videoUrl"
+              class="url-input"
+              placeholder="Paste video link here..."
+              autocomplete="off"
+            />
+            <button id="fetchBtn" class="btn-primary">
+              <span class="btn-text">Get Video</span>
+              <span class="btn-loader" hidden></span>
+            </button>
+          </div>
+          <p class="form-hint">Works with public videos and reels only</p>
+        </div>
+
+        <div id="errorBox" class="error-box" hidden></div>
+        <div id="resultBox" class="result-box" hidden></div>
+      </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+      <div class="container">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h3>Copy the Link</h3>
+            <p>Open the video on YouTube, Facebook, TikTok, or Instagram and copy its URL.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <h3>Paste & Fetch</h3>
+            <p>Paste the link above and click "Get Video" to load available formats.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <h3>Download</h3>
+            <p>Choose your preferred quality and download the video to your device.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ad placeholder: in-content -->
+  <!--
+  <div class="ad-banner ad-mid">
+    <div class="ad-placeholder">Ad Space (responsive)</div>
+  </div>
+  -->
+
+    <section class="features" id="features">
+      <div class="container">
+        <h2 class="section-title">Why Choose VideoGrabber?</h2>
+        <div class="features-grid">
+          <div class="feature">
+            <div class="feature-icon">⚡</div>
+            <h3>Lightning Fast</h3>
+            <p>Download videos in seconds with our high-speed servers.</p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">🎬</div>
+            <h3>HD Quality</h3>
+            <p>Save videos in up to 1080p Full HD quality.</p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">🆓</div>
+            <h3>100% Free</h3>
+            <p>No registration, no fees, no hidden charges ever.</p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">🚫</div>
+            <h3>No Watermark</h3>
+            <p>TikTok videos download without any watermark.</p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">🔒</div>
+            <h3>Safe & Secure</h3>
+            <p>We never store your data or the videos you download.</p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">📱</div>
+            <h3>Works Everywhere</h3>
+            <p>Use on any device - phone, tablet, or desktop.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="supported" id="supported">
+      <div class="container">
+        <h2 class="section-title">Supported Platforms</h2>
+        <div class="platforms-grid">
+          <div class="platform-card">
+            <div class="platform-logo logo-yt">▶</div>
+            <h3>YouTube</h3>
+            <p>Videos, Shorts, Music</p>
+          </div>
+          <div class="platform-card">
+            <div class="platform-logo logo-fb">f</div>
+            <h3>Facebook</h3>
+            <p>Videos, Reels, Stories</p>
+          </div>
+          <div class="platform-card">
+            <div class="platform-logo logo-tt">♪</div>
+            <h3>TikTok</h3>
+            <p>Videos without watermark</p>
+          </div>
+          <div class="platform-card">
+            <div class="platform-logo logo-ig">◎</div>
+            <h3>Instagram</h3>
+            <p>Reels, Posts, IGTV</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq" id="faq">
+      <div class="container">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Is VideoGrabber free to use?</summary>
+            <p>Yes, our service is completely free. No registration or payment required.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What video quality is supported?</summary>
+            <p>We support up to 1080p Full HD. Available qualities depend on the source video.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Can I download private videos?</summary>
+            <p>No, only public videos can be downloaded. Private or age-restricted content is not supported.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Is downloading videos legal?</summary>
+            <p>You should only download videos you have the right to download. Respect copyright laws and the original creators' rights.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Does TikTok download include watermark?</summary>
+            <p>No, we strip the TikTok watermark automatically when possible.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-col">
+          <h4>VideoGrabber</h4>
+          <p>Free video downloader for all major platforms. Fast, simple, and reliable.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="#">Terms of Service</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">DMCA</a>
+          <a href="#">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Disclaimer</h4>
+          <p class="disclaimer">VideoGrabber is not affiliated with YouTube, Facebook, TikTok, or Instagram. All trademarks belong to their respective owners. We do not host any copyrighted content.</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 VideoGrabber. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="progressOverlay" class="progress-overlay" hidden>
+    <div class="progress-card" role="status" aria-live="polite">
+      <div class="progress-head">
+        <span class="progress-spinner"></span>
+        <div class="progress-text">
+          <strong class="progress-title" id="progressTitle">Preparing your download</strong>
+          <span class="progress-detail" id="progressDetail">Please wait…</span>
+        </div>
+        <span class="progress-percent" id="progressPercent">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar is-indeterminate" id="progressBar"></div>
+      </div>
+      <p class="progress-note">Keep this tab open until the download finishes.</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
